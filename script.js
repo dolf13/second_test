@@ -1,17 +1,17 @@
-'use strict';
+// 'use strict';
 
-let 
+let
     money = prompt("Ваш бюджет на месяц?", ""),
     time = prompt("Введите дату в формате YYYY-MM-DD", "");
 
 let
     appData = {
-    cache: money,
-    timeData: time,
-    expenses: {},
-    optionalExpenses: {},
-    income: [],
-    saving: false
+        cache: money,
+        timeData: time,
+        expenses: {},
+        optionalExpenses: {},
+        income: [],
+        saving: false
     };
 
 let
@@ -24,10 +24,9 @@ let
 appData.expenses[Ras1] = Bu1;
 appData.expenses[Ras2] = Bu2;
 
-console.log(appData.expenses);
-
-alert(appData.Cache/30);
-
 // а так работает неправильно
-// appData.expenses.Rashod1 = Budget1;
-// appData.expenses.Rashod2 = Budget2;
+// appData.expenses.Ras1 = Bu1;
+// appData.expenses.Ras2 = Bu2;
+
+alert(appData.cache / 30);
+console.log(appData.expenses);
