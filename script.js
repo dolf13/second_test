@@ -1,46 +1,33 @@
 'use strict';
 
+let 
+    money = prompt("Ваш бюджет на месяц?", ""),
+    time = prompt("Введите дату в формате YYYY-MM-DD", "");
 
-
-let Money = 0,
-    Time = "13-05-1986";
-
-alert("Приступим?");
-
-
-Money = prompt("Ваш бюджет на месяц?", "");
-console.log(Money);
-
-Time = prompt("Введите дату в формате YYYY-MM-DD", "");
-console.log(Time);
-
-var Question1 = "Введите обязательную статью расходов в месяц",
-    Question2 = "Во сколько это обойдется?";
-
-let Rashod1 = prompt(Question1, ""),
-    Budget1 = prompt(Question2, ""),
-    Rashod2 = prompt(Question1, ""),
-    Budget2 = prompt(Question2, "");
-
-let expenses = {
-    "Rashod1" : "Budget1",
-    "Rashod2" : "Budget2"
-};
-
-
-
-
-var appData = {
-    Cache: Money,
-    timeData: Time,
-    expenses,
+let
+    appData = {
+    cache: money,
+    timeData: time,
+    expenses: {},
     optionalExpenses: {},
-    income: {},
+    income: [],
     saving: false
+    };
 
-};
+let
+    Ras1 = prompt("Введите обязательную статью расходов в месяц", ""),
+    Bu1 = prompt("Во сколько это обойдется?", ""),
+    Ras2 = prompt("Введите  вторую обязательную статью расходов в месяц", ""),
+    Bu2 = prompt("Во сколько это обойдется?", "");
 
-console.log(expenses);
+// так работает правильно
+appData.expenses[Ras1] = Bu1;
+appData.expenses[Ras2] = Bu2;
 
+console.log(appData.expenses);
 
-console.log(appData.Cache);
+alert(appData.Cache/30);
+
+// а так работает неправильно
+// appData.expenses.Rashod1 = Budget1;
+// appData.expenses.Rashod2 = Budget2;
