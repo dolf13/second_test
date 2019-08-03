@@ -95,5 +95,6 @@ function chooseOptExpenses() {
     }
     return a;
 }
-let optionalExpenses = chooseOptExpenses();
-console.log(optionalExpenses);
+appData.optionalExpenses = chooseOptExpenses();
+
+console.log(appData.optionalExpenses);
