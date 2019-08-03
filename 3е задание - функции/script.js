@@ -1,14 +1,13 @@
 //  Скрипт задание 3
 
+
+// спрашиваем про бюджет и дату
 let money, 
     time;
-
 
 function start () {
     money = +prompt("Ваш бюджет на месяц?", "");
     time = prompt("Введите дату в формате YYYY-MM-DD", "");
-
-
     while (isNaN(money) || money == "" || money == null){ 
         money = +prompt("Ваш бюджет на месяц?", "");
     }
@@ -16,6 +15,7 @@ function start () {
 start();
 
 
+// Объект с информацией
 let appData = {
     Budget: money,
     timeData: time,
@@ -25,6 +25,8 @@ let appData = {
     saving: true
 };
 
+
+// Спрашиваем и записываем необязательные расходы 
 function chooseExpenses(){
     for (let i = 0; i < 2; i++) {
         let
@@ -40,13 +42,10 @@ function chooseExpenses(){
         else {
             confirm('Вы ввели некорректные ответы на вопрос! Попробуйте еще раз.');
             i--;
-    
         }
     }
-
 }
 chooseExpenses();
-
 
 
 // Расчет дневного бюджета из бюджета за 1 месяц
@@ -57,7 +56,6 @@ function detectDayBudget(){
     console.log(appData);
 }
 detectDayBudget();
-
 
 
 // Проверяем на уровень дохода по дневному бюджету
@@ -74,6 +72,7 @@ function detectLevel(){
 }
 detectLevel();
 
+
 // Расчет ежемесячного дохода с процента от накоплений
 function checkSavings() {
     if (appData.saving == true ) {
@@ -83,9 +82,7 @@ function checkSavings() {
         appData.mothInCome = save/100/12*procent;
         alert("Доход в месяц: " + appData.mothInCome);
     }
-    
 }
-
 checkSavings();
 
 
@@ -93,12 +90,10 @@ checkSavings();
 function chooseOptExpenses() {
     let a = {};  
     for (let i =1; i < 4;) {
-        a[i] = prompt('Статья необязательных расходов?');
+        a[i] = prompt(i+'-я статья необязательных расходов?');
         i++;
     }
     return a;
-        
 }
-
 let optionalExpenses = chooseOptExpenses();
 console.log(optionalExpenses);
