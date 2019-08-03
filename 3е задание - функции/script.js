@@ -74,7 +74,7 @@ function detectLevel(){
 }
 detectLevel();
 
-
+// Расчет ежемесячного дохода с процента от накоплений
 function checkSavings() {
     if (appData.saving == true ) {
         let save = +prompt("Какая сумма накоплений"),
@@ -89,7 +89,7 @@ function checkSavings() {
 checkSavings();
 
 
-
+//Записываем 3 вопроса - статьи необязательных расходов
 function chooseOptExpenses() {
     let a = {};  
     for (let i =1; i < 4;) {
