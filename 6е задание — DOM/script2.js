@@ -35,6 +35,11 @@ box.appendChild(text2);
 // document.body.insertBefore(div, circle[i]); // вставить div перед дочерним circle у body
 
 
+div.innerHTML =   "<h1>Привет</h1> ";  // вставить HTML в элемент 
+
+circle[1].textContent = " текст";
+circle[1].innerHTML = '</br> </br>  &nbsp;&nbsp; текст2 ';
+
 
 //  немного анимации )) 
 let i = 0;
@@ -49,3 +54,12 @@ setTimeout(testTime, 1000);
 setTimeout(testTime, 3000);
 setTimeout(testTime, 5000);
 setTimeout(testTime, 7000);
+
+
+function changePage (){
+    document.body.removeChild(but[0]); // удалить дочерний элемент
+    but[0].style.background = 'green';
+    document.body.replaceChild(but[0], but[3]); // заменить эдемент [3] на [0]
+}
+
+setTimeout(changePage, 9000);
