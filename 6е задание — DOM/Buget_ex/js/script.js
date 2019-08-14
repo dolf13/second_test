@@ -5,26 +5,26 @@
 // Вносим переменные по заданию 
 
 let startBtn = document.getElementById('start'),
-    budgetValue = document.getElementsByClassName('budget-value')[0],
-    dayBudgetValue = document.getElementsByClassName('daybudget-value')[0],
-    levelValue = document.getElementsByClassName('level-value')[0],
-    expensesValue = document.getElementsByClassName('expenses-value')[0],
-    optionalExpensesV = document.getElementsByClassName('optionalexpenses-value')[0],
-    incomeValue = document.getElementsByClassName('income-value')[0],
-    monthSavingsV = document.getElementsByClassName('monthsavings-value')[0],
-    yearSavingsV = document.getElementsByClassName('yearsavings-value')[0],
+    budgetValue = document.getElementsByClassName('budget-value'),
+    daybudgetValue = document.getElementsByClassName('daybudget-value'),
+    levelValue = document.getElementsByClassName('level-value'),
+    expensesV = document.getElementsByClassName('expenses-value'),
+    optionalexpensesV = document.getElementsByClassName('optionalexpenses-value'),
+    incomeV = document.getElementsByClassName('income-value'),
+    monthsavingsV = document.getElementsByClassName('monthsavings-value'),
+    yearsavingsV = document.getElementsByClassName('yearsavings-value'),
 
     expensesItems = document.getElementsByClassName('expenses-item'),
-    expensesBtn = document.getElementsByTagName('button')[0],
+    expensesItemBtn = document.getElementsByTagName('button')[0],
     optionalExpensesBtn = document.getElementsByTagName('button')[1],
-    countBtn = document.getElementsByTagName('button')[2],
+    countBudgetBtn = document.getElementsByTagName('button')[2],
     optionalExpensesItem = document.querySelectorAll('.optionalexpenses-item'),
 
     chooseIncomeV = document.querySelector('.choose-income'),
     checkBoxSavings = document.querySelector('#savings'),
     chooseSum = document.querySelector('#sum'),
     percent = document.querySelector('#percent'),
-    
+ 
 
     yearV = document.querySelector('.year-value'),
     monthV = document.querySelector('.month-value'),
@@ -32,7 +32,8 @@ let startBtn = document.getElementById('start'),
 
 
 // спрашиваем про бюджет и дату
-let money, time;
+let money,
+    time;
 
 function start() {
     money = +prompt("Ваш бюджет на месяц?", "");
