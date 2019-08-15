@@ -24,27 +24,13 @@ let startBtn = document.getElementById('start'),
     checkBoxSavings = document.querySelector('#savings'),
     chooseSum = document.querySelector('#sum'),
     percent = document.querySelector('#percent'),
-    
+
 
     yearV = document.querySelector('.year-value'),
     monthV = document.querySelector('.month-value'),
     dayV = document.querySelector('.day-value');
 
-
-// спрашиваем про бюджет и дату
-let money, time;
-
-function start() {
-    money = +prompt("Ваш бюджет на месяц?", "");
-    time = prompt("Введите дату в формате YYYY-MM-DD", "");
-    while (isNaN(money) || money == "" || money == null) {
-        money = +prompt("Ваш бюджет на месяц?", "");
-    }
-}
-
-// start();
-
-
+let money, time, nowDate;
 // Объект с информацией
 let appData = {
     Budget: money,
@@ -52,80 +38,151 @@ let appData = {
     expenses: {},
     optionalExpenses: {},
     income: [],
-    saving: true,
-    chooseExpenses: function () {              // Спрашиваем и записываем обязательные расходы 
-        for (let i = 0; i < 2; i++) {
-            let
-                a = prompt("Введите " + (i + 1) + "-ю обязательную статью расходов в месяц", ""),
-                b = prompt("Во сколько это обойдется?", "");
-
-
-            if (typeof (a) === 'string' && typeof (a) != null && (typeof (b)) != null &&
-                a != "" && b != "" && a.length < 50 && b.length < 50) {
-                appData.expenses[a] = b;
-                console.log("ДА ДА ДА");
-            } else {
-                confirm('Вы ввели некорректные ответы на вопрос! Попробуйте еще раз.');
-                i--;
-            }
-        }
-    },
-    detectDayBudget: function () {                 // Расчет дневного бюджета из бюджета за 1 месяц
-        appData.moneyPerDay = (appData.Budget / 30).toFixed(1);
-        alert("Ежедневный бюджет: " + appData.moneyPerDay);
-        console.log(appData);
-    },
-    detectLevel: function () {                // Проверяем на уровень дохода по дневному бюджету
-        if (appData.moneyPerDay < 1000) {
-            console.log('У вас минимальный уровень дохода');
-        } else if (appData.moneyPerDay >= 1000 && appData.moneyPerDay < 5000) {
-            console.log('У вас средний уровень дохода');
-        } else if (appData.moneyPerDay >= 5000) {
-            console.log('У вас высокий уровень дохода');
-        }
-    },
-    checkSavings: function () {               // Расчет ежемесячного дохода с процента от накоплений
-        if (appData.saving == true) {
-            let save = +prompt("Какая сумма накоплений"),
-                procent = +prompt("Какой процент");
-
-            appData.mothInCome = save / 100 / 12 * procent;
-            alert("Доход в месяц: " + appData.mothInCome);
-        }
-    },
-    chooseOptExpenses: function () {         // Записываем необязательные расходы
-        let a = {};
-        for (let i = 1; i < 4;) {
-            a[i] = prompt(i + '-я статья необязательных расходов?');
-            i++;
-        }
-        appData.optionalExpenses = a;
-    },
-    chooseIncome: function () {          // Записываем названия доп доходов
-        let items = "";
-        console.log(typeof (items));
-        while (items == "" || items == null || items.length < 3) {
-            items = prompt("Что вам приносит дополнительный доход. Перечисли через запятую", "");
-        }
-
-        appData.income = items.split(', ');
-        appData.income.push(prompt("Допишите, если вспомнили что-то еще. "));
-        appData.income.sort();
-
-        appData.income.forEach(function (item, i, arrr) {
-            alert("Способы доп зароботка:  \n" + (i + 1) + "- й:" + appData.income[i]);
-        });
-
-        // for (let xc of appData.income)  {         // Выводм значение массива циклом for of 
-        //     console.log("Для элемента объекта c индексом :  " + appData.income.indexOf(xc)  + " \n Цикл FOR OF дает значение: " + xc);
-        // } 
-        
-    }
+    saving: false,
+    monthSum: 0
 };
 
 
-for (let x in appData) {
-    console.log("Программа содержит следующие данные:  " + x+ ' --- ' + appData[x]);
+
+// Начать расчет
+startBtn.addEventListener('click', function () {
+    // вводим дату и проверяем на валидность костылем
+    do {
+        time = prompt("Введите дату в формате YYYY-MM-DD", "");
+        nowDate = new Date(Date.parse(time));
+        console.log(nowDate);
+    } while (nowDate == 'Invalid Date');
+
+    // спрашиваем про бюджет и проверяем ввод 
+    money = +prompt("Ваш бюджет на месяц?", "");
+    while (isNaN(money) || money == "" || money == null) {
+        money = +prompt("Ваш бюджет на месяц?", "");
+    }
+    appData.Budget = money;
+    appData.timeData = time;
+    budgetValue.textContent = appData.Budget.toFixed();
+
+    yearV.value = nowDate.getFullYear();
+    monthV.value = nowDate.getMonth() + 1;
+    dayV.value = nowDate.getDate();
+
+// Показываем кнопки, если бюджет ввели 
+    if (appData.Budget != undefined){
+    expensesBtn.style.display = ''; 
+    optionalExpensesBtn.style.display = ''; 
+    countBtn.style.display = ''; 
+}
+});
+
+//Сначала скроем все кнопки кроме Старт. 
+ expensesBtn.style.display = 'none'; 
+ optionalExpensesBtn.style.display = 'none';
+ countBtn.style.display = 'none';
+
+// Спрашиваем и записываем обязательные расходы 
+expensesBtn.addEventListener('click', function () {
+    let sum = 0;
+    for (let i = 0; i < expensesItems.length; i++) {
+        let
+            a = expensesItems[i].value,
+            b = expensesItems[++i].value;
+        console.log(i);
+        // expensesItems[i].value = '';
+        // expensesItems[i-1].value = '';
+
+        if (typeof (a) === 'string' && typeof (a) != null && (typeof (b)) != null &&
+            a != "" && b != "" && a.length < 50 && b.length < 50) {
+            appData.expenses[a] = b;
+            sum += +b;
+            appData.monthSum = sum;
+            expensesValue.textContent = sum;
+
+
+        } else {
+            confirm('Вы ввели некорректные ответы на вопрос! Попробуйте еще раз.');
+            i--;
+            break;
+        }
+    }
+
+});
+
+
+// Записываем необязательные расходы
+optionalExpensesBtn.addEventListener('click', function () {
+
+    for (let i = 0; i < optionalExpensesItem.length; i++) {
+        appData.optionalExpenses[i] = optionalExpensesItem[i].value;
+        console.log(optionalExpensesItem[i].value);
+        optionalExpensesV.textContent += (i + 1) + ')' + appData.optionalExpenses[i] + '  ';
+    }
+});
+
+
+// Расчет дневного бюджета из бюджета за 1 месяц
+countBtn.addEventListener('click', detectDayBudgetAndLavel);
+
+function detectDayBudgetAndLavel() {
+    if (appData.Budget != undefined) {
+        appData.moneyPerDay = ((appData.Budget-appData.monthSum) / 30).toFixed();
+        dayBudgetValue.textContent = appData.moneyPerDay;
+
+        // Проверяем на уровень дохода по дневному бюджету
+        if (appData.moneyPerDay < 1000) {
+            levelValue.textContent = 'У вас минимальный уровень дохода';
+        } else if (appData.moneyPerDay >= 1000 && appData.moneyPerDay < 5000) {
+            levelValue.textContent = 'У вас средний уровень дохода';
+        } else if (appData.moneyPerDay >= 5000) {
+            levelValue.textContent = 'У вас высокий уровень дохода';
+        }
+    } else {
+        dayBudgetValue.textContent = 'Ошибка! Начни расчет';
+    }
 }
 
-console.log(budgetValue);
+// Записываем источники доп дохода
+chooseIncomeV.addEventListener('input', function () {
+
+    let items = chooseIncomeV.value;
+    appData.income = items.split(', ');
+    appData.income.sort();
+    incomeValue.textContent = appData.income;
+});
+
+// Расчитываем доп доход с накоплений и указываем  за 1 месяй и 1 год
+checkBoxSavings.addEventListener('click', function () {
+    if (appData.saving == true) {
+        appData.saving = false;
+    } else {
+        appData.saving = true;
+    }
+
+});
+
+
+chooseSum.addEventListener('input', function () {
+    if (appData.saving == true) {
+        let sum = +chooseSum.value,
+            prcnt = +percent.value;
+        appData.mothInCome = sum / 100 / 12 * prcnt;
+        appData.yearInCome = sum / 100 * prcnt;
+
+        monthSavingsV.textContent = appData.mothInCome;
+        yearSavingsV.textContent = appData.yearInCome;
+
+    }
+
+});
+
+percent.addEventListener('input', function () {
+    if (appData.saving == true) {
+        let sum = +chooseSum.value,
+            prcnt = +percent.value;
+        appData.mothInCome = sum / 100 / 12 * prcnt;
+        appData.yearInCome = sum / 100 * prcnt;
+
+        monthSavingsV.textContent = appData.mothInCome.toFixed(1);
+        yearSavingsV.textContent = appData.yearInCome.toFixed(1);
+    }
+
+});
