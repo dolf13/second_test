@@ -3,7 +3,8 @@
 // constTimer = "2019-08-29", // так получаем  +3 часа ко времени 2019-08-29T03:00:00
 
 // очень важно! Писать полное время иначе констурктор добавляет  3 часа (см выше)
-let  constTimer = "2019-09-21T00:00:00",   
+// месяц в записи цифра от 1 до 12
+let  constTimer = "2019-08-31T00:00:00",   
      idTimerHtml = 'timer';
     
 // функция расчет разницы в датах текущей и таймера в миллисекундах 
@@ -21,10 +22,10 @@ function UpdateTime (endOfTime) {
         m = Math.floor((timeDelta/1000/60) % 60),
         s = Math.floor((timeDelta/1000) % 60);
         
-    // проверка в консоль
+    // проверка расчета в консоль
     // console.log(d + ' дней : ' + h + ' часов : ' + m + ' минут : ' + s + ' секунд'); 
 
-    // возвращаем массив значений
+    // возвращаем объект значений
     return {
         total : timeDelta,
         days : d,
@@ -35,6 +36,8 @@ function UpdateTime (endOfTime) {
 
 }
 // основная функция 
+//передаем конечную дату и блок HTML 
+//в блоке должны быть объекты с классами  days / hours / minutes / seconds + ::after
 function SetTimerClock (timerDate, divId) {
     let timer = document.getElementById(divId),
         days = timer.querySelector('.days'),
@@ -44,10 +47,36 @@ function SetTimerClock (timerDate, divId) {
     
     // обновляем контент в HTML 
     function UpDate () {
-        days.textContent = UpdateTime(timerDate).days;
-        hours.textContent = UpdateTime(timerDate).hours;
-        minutes.textContent = UpdateTime(timerDate).minutes;
-        seconds.textContent = UpdateTime(timerDate).seconds;
+        //убрать дни если их нет
+        if (UpdateTime(timerDate).days <= 0) {
+            days.style.display = 'none';
+        }
+        if (UpdateTime(timerDate).days < 10) {
+            days.textContent = '0' + UpdateTime(timerDate).days; 
+        }
+        else {
+            days.textContent = UpdateTime(timerDate).days;
+        }
+        if (UpdateTime(timerDate).hours < 10) {
+            hours.textContent = '0' + UpdateTime(timerDate).hours;
+        }
+        else {
+            hours.textContent = UpdateTime(timerDate).hours;
+        }
+        if (UpdateTime(timerDate).minutes < 10) {
+            minutes.textContent = '0' + UpdateTime(timerDate).minutes;
+        }
+        else {
+            minutes.textContent = UpdateTime(timerDate).minutes;
+        }
+        if (UpdateTime(timerDate).seconds < 10) {
+            seconds.textContent = '0' + UpdateTime(timerDate).seconds;
+        }
+        else {
+            seconds.textContent = UpdateTime(timerDate).seconds;
+        }
+         
+        
         
         // подмена на нули если дата прошла
         if (UpdateTime(timerDate).seconds < 0 ){
